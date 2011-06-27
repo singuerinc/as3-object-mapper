@@ -1,0 +1,44 @@
+h3. Syntax
+
+<pre>
+<code>
+//User.as
+
+package {
+
+	public class User {
+
+		[Map(required=true)]
+		public var uid:uint;
+
+		[Map(required=true)]
+		public var name:String;
+
+		[Map(required=false)]
+		public var surname:String;
+
+		[Map]
+		public var age:uint;
+
+		public var hobbies:Array;
+		public var nickname:String;
+	}
+}
+
+
+//Example.as
+
+var userData:XML =
+<user uid="1" age="29">
+	<name>John</name>
+	<surname>Doe</surname>
+</user>;
+
+var user:User = Mapper.mapTo(userData, User);
+
+trace(user.uid);// 1
+trace(user.name);// John
+trace(user.surname);// Doe
+trace(user.age);// 28
+</code>
+</pre>
