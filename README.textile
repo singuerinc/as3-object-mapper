@@ -5,40 +5,52 @@ h3. Syntax
 //User.as
 
 package {
-
 	public class User {
-
+		// required value
 		[Map(required=true)]
 		public var uid:uint;
 
-		[Map(required=true)]
+		// map from different prop name
+		[Map(required=true, mapFrom='firstName')]
 		public var name:String;
 
+		// optional map ( mapped only if exist in source )
 		[Map(required=false)]
 		public var surname:String;
 
+		// optional mapping, only if exist in source and "strict" mapping is set to true (default)
 		[Map]
 		public var age:uint;
 
-		public var hobbies:Array;
+		[Map]
+		public var friends:Array;
+
+		// no mapped props
 		public var nickname:String;
+		public var hobbies:Array;
 	}
 }
 
 
 //Example.as
 
-var userData:XML =
-<user uid="1" age="29">
-	<name>John</name>
-	<surname>Doe</surname>
-</user>;
+	var userData:XML =
+	<user uid="1" age="28">
+		<firstName>John</firstName>
+		<surname>Doe</surname>
+		<friends>
+			<friend>Robert</friend>
+			<friend>Peter</friend>
+			<friend>Jenny</friend>
+		</friends>
+		<!-- or <friends>Robert, Peter, Jenny</friends>-->
+	</user>;
 
-var user:User = Mapper.mapTo(userData, User);
-
-trace(user.uid);// 1
-trace(user.name);// John
-trace(user.surname);// Doe
-trace(user.age);// 28
+	var user:User = Mapper.mapTo(userData, User, true);
+	trace(user.uid);// 1
+	trace(user.name);// John
+	trace(user.surname);// Doe
+	trace(user.age);// 28
+	trace(user.friends);// [Robert, Peter, Jenny]
 </code>
 </pre>

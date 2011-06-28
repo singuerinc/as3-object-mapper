@@ -69,6 +69,7 @@ package net.singuerinc.utils {
 				} else if (data.attribute(mapFrom).length() == 1) {
 					value = data.attribute(mapFrom)[0];
 				} else if (pRequired || strict) {
+					// FIXME: Un error o null??
 					throw new Error('"' + pName + '" property in ' + description.@name + ' is required!');
 				} else {
 					// no mapping???
@@ -87,12 +88,20 @@ package net.singuerinc.utils {
 							instance[pName] = Number(value);
 							break;
 						case 'array':
-							instance[pName] = String(value).split(',');
+
+							if (value is XML) {
+								var xmlNode:XML = value;
+								if (xmlNode.hasComplexContent()) {
+									instance[pName] = [];
+									for each (var n:XML in xmlNode.children()) {
+										instance[pName].push(String(n));
+									}
+								} else {
+									instance[pName] = String(value).split(',');
+								}
+							}
+
 							break;
-						// case '__as3__.vec::vector.<string>':
-						// instance[pName] = new Vector.<String>();
-						// instance[pName].push.apply(instance[pName], String(value).split(','));
-						// break;
 						case 'string':
 							instance[pName] = String(value);
 							break;
